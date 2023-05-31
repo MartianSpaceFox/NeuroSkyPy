@@ -95,66 +95,94 @@ class NeuroSkyPy(object):
                 payload=[]
                 checksum=0;
                 payloadLength=int(srl.read(1).hex(),16)
-                for i in range(payloadLength):
+                for _ in range(payloadLength):
                     tempPacket=srl.read(1).hex()
                     payload.append(tempPacket)
                     checksum+=int(tempPacket,16)
                 checksum=~checksum&0x000000ff
                 if checksum==int(srl.read(1).hex(),16):
-                   i=0
-                   while i<payloadLength:
-                       code=payload[i]
-                       if(code=='02'):#poorSignal
-                           i=i+1; self.poorSignal=int(payload[i],16)
-                       elif(code=='04'):#attention
-                           i=i+1; self.attention=int(payload[i],16)
-                       elif(code=='05'):#meditation
-                           i=i+1; self.meditation=int(payload[i],16)
-                       elif(code=='16'):#blink strength
-                           i=i+1; self.blinkStrength=int(payload[i],16)
-                       elif(code=='80'):#raw value
-                           i=i+1 #for length/it is not used since length =1 byte long and always=2
-                           i=i+1; val0=int(payload[i],16)
-                           i=i+1; self.rawValue=val0*256+int(payload[i],16)
-                           if self.rawValue>32768 :
-                               self.rawValue=self.rawValue-65536
-                       elif(code=='83'):#ASIC_EEG_POWER
-                           i=i+1;#for length/it is not used since length =1 byte long and always=2
-                           #delta:
-                           i=i+1; val0=int(payload[i],16)
-                           i=i+1; val1=int(payload[i],16)
-                           i=i+1; self.delta=val0*65536+val1*256+int(payload[i],16)
-                           #theta:
-                           i=i+1; val0=int(payload[i],16)
-                           i=i+1; val1=int(payload[i],16)
-                           i=i+1; self.theta=val0*65536+val1*256+int(payload[i],16)
-                           #lowAlpha:
-                           i=i+1; val0=int(payload[i],16)
-                           i=i+1; val1=int(payload[i],16)
-                           i=i+1; self.lowAlpha=val0*65536+val1*256+int(payload[i],16)
-                           #highAlpha:
-                           i=i+1; val0=int(payload[i],16)
-                           i=i+1; val1=int(payload[i],16)
-                           i=i+1; self.highAlpha=val0*65536+val1*256+int(payload[i],16)
-                           #lowBeta:
-                           i=i+1; val0=int(payload[i],16)
-                           i=i+1; val1=int(payload[i],16)
-                           i=i+1; self.lowBeta=val0*65536+val1*256+int(payload[i],16)
-                           #highBeta:
-                           i=i+1; val0=int(payload[i],16)
-                           i=i+1; val1=int(payload[i],16)
-                           i=i+1; self.highBeta=val0*65536+val1*256+int(payload[i],16)
-                           #lowGamma:
-                           i=i+1; val0=int(payload[i],16)
-                           i=i+1; val1=int(payload[i],16)
-                           i=i+1; self.lowGamma=val0*65536+val1*256+int(payload[i],16)
-                           #midGamma:
-                           i=i+1; val0=int(payload[i],16)
-                           i=i+1; val1=int(payload[i],16)
-                           i=i+1; self.midGamma=val0*65536+val1*256+int(payload[i],16)
-                       else:
-                           pass
-                       i=i+1
+                    i=0
+                    while i<payloadLength:
+                        code=payload[i]
+                        if code == '02':
+                            i += 1
+                            self.poorSignal=int(payload[i],16)
+                        elif code == '04':
+                            i += 1
+                            self.attention=int(payload[i],16)
+                        elif code == '05':
+                            i += 1
+                            self.meditation=int(payload[i],16)
+                        elif code == '16':
+                            i += 1
+                            self.blinkStrength=int(payload[i],16)
+                        elif code == '80':
+                            i += 1
+                            i += 1
+                            val0=int(payload[i],16)
+                            i += 1
+                            self.rawValue=val0*256+int(payload[i],16)
+                            if self.rawValue>32768 :
+                                self.rawValue=self.rawValue-65536
+                        elif code == '83':
+                            i += 1
+                                                   #delta:
+                            i += 1
+                            val0=int(payload[i],16)
+                            i += 1
+                            val1=int(payload[i],16)
+                            i += 1
+                            self.delta=val0*65536+val1*256+int(payload[i],16)
+                                                   #theta:
+                            i += 1
+                            val0=int(payload[i],16)
+                            i += 1
+                            val1=int(payload[i],16)
+                            i += 1
+                            self.theta=val0*65536+val1*256+int(payload[i],16)
+                                                   #lowAlpha:
+                            i += 1
+                            val0=int(payload[i],16)
+                            i += 1
+                            val1=int(payload[i],16)
+                            i += 1
+                            self.lowAlpha=val0*65536+val1*256+int(payload[i],16)
+                                                   #highAlpha:
+                            i += 1
+                            val0=int(payload[i],16)
+                            i += 1
+                            val1=int(payload[i],16)
+                            i += 1
+                            self.highAlpha=val0*65536+val1*256+int(payload[i],16)
+                                                   #lowBeta:
+                            i += 1
+                            val0=int(payload[i],16)
+                            i += 1
+                            val1=int(payload[i],16)
+                            i += 1
+                            self.lowBeta=val0*65536+val1*256+int(payload[i],16)
+                                                   #highBeta:
+                            i += 1
+                            val0=int(payload[i],16)
+                            i += 1
+                            val1=int(payload[i],16)
+                            i += 1
+                            self.highBeta=val0*65536+val1*256+int(payload[i],16)
+                                                   #lowGamma:
+                            i += 1
+                            val0=int(payload[i],16)
+                            i += 1
+                            val1=int(payload[i],16)
+                            i += 1
+                            self.lowGamma=val0*65536+val1*256+int(payload[i],16)
+                                                   #midGamma:
+                            i += 1
+                            val0=int(payload[i],16)
+                            i += 1
+                            val1=int(payload[i],16)
+                            i += 1
+                            self.midGamma=val0*65536+val1*256+int(payload[i],16)
+                        i += 1
 
         # when the thread is closed then we exit and close the thread
         self.srl.close()
