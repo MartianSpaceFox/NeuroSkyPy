@@ -15,12 +15,7 @@ def generate_hex_color():
 	:return:
 	'''
 	r = lambda: random.randint(0, 255)
-	hex_number = '#%02X%02X%02X' % (r(), r(), r())
-	# second way:
-	# random_number = random.randint(1118481, 16777215)
-	# hex_number = str(hex(random_number))
-	# hex_number = '#' + hex_number[2:]
-	return hex_number
+	return '#%02X%02X%02X' % (r(), r(), r())
 
 
 def save_session(dic, config):
@@ -76,8 +71,7 @@ def plot_graphics(data, var_names, config, save_img=False, transparent=False):
 
 	for idy, y in enumerate([lines_norm, lines]):
 		# fijamos la variable de guardado
-		if idy == 0: save_var = "normalized"
-		else: 	save_var = "unnormalized"
+		save_var = "normalized" if idy == 0 else "unnormalized"
 		# Ponemos leyenda y titulo
 		plt.title("Señales del usuario: "+config['name']+" para el experimento: "+config['hour_exp'])
 		plt.xlabel("Time in seconds")
@@ -88,7 +82,10 @@ def plot_graphics(data, var_names, config, save_img=False, transparent=False):
 			plt.legend(labels)
 
 		# guardamos la imagen
-		if save_img: plt.savefig(path_to_save+"All_signals_"+save_var+".png", transparent=transparent)
+		if save_img:
+			plt.savefig(
+				f"{path_to_save}All_signals_{save_var}.png", transparent=transparent
+			)
 		# la mostramos
 		plt.show()
 		# la borramos y volvemos a dibujar
@@ -96,7 +93,12 @@ def plot_graphics(data, var_names, config, save_img=False, transparent=False):
 
 	# pintamos cada una de las graficas por separado
 	for idx, i in enumerate(lines):
-		plt.title("Variable: " + var_names[idx] + " " + config['name'] + "_" + config['hour_exp'])
+		plt.title(
+			f"Variable: {var_names[idx]} "
+			+ config['name']
+			+ "_"
+			+ config['hour_exp']
+		)
 		plt.xlabel("Time in seconds")
 		plt.ylabel("Intensity")
 		plt.plot(x, i, colors[idx])

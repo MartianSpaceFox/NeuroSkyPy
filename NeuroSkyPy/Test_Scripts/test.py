@@ -35,7 +35,7 @@ def meditation_callback(value):
         value = value + v
     value = value / len(volume)
 
-    os.system("amixer sset 'Master' " + str(value) + "% > /dev/null")
+    os.system(f"amixer sset 'Master' {str(value)}% > /dev/null")
     #do other stuff (fire a rocket), based on the obtained value of attention_value
     #do some more stuff
     return None
